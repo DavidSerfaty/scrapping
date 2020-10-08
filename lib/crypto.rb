@@ -3,36 +3,26 @@ require 'nokogiri'
 require 'open-uri'
 
 def coinmarketcap_data
-  return coinmarketcap = Nokogiri::HTML(URI.open("https://coinmarketcap.com/all/views/all/"))
+  coinmarketcap = Nokogiri::HTML(URI.open('https://coinmarketcap.com/all/views/all/'))
 end
 
 def crypto_name
-  xpath_crypto_name = coinmarketcap_data.xpath('//td[contains(@class,"symbol")]')
-  crypto_name_array = Array.new
-  xpath_crypto_name.each do |name|
-    crypto_name_array << name.text
-  end
-  return crypto_name_array
+  return coinmarketcap_data.xpath('//td[contains(@class,"symbol")]')
 end
 
 def crypto_price
-  xpath_crypto_price = coinmarketcap_data.xpath('//td[contains(@class,"price")]')
-  crypto_price_array = Array.new
-  xpath_crypto_price.each do |price|
-    crypto_price_array << price.text.delete('$,').to_f
-  end
-  return crypto_price_array
+  return coinmarketcap_data.xpath('//td[contains(@class,"price")]')
 end
 
 def final_result
-  result = Array.new
+  result = []
   crypto_name.zip(crypto_price).each do |crypto_name, crypto_price|
-    crypto_hash = Hash.new
-    crypto_hash[crypto_name] = crypto_price
+    crypto_hash = {}
+    crypto_hash[crypto_name.text] = crypto_price.text.delete('$,').to_f
     puts crypto_hash
     result << crypto_hash
   end
-  return result
+  result
 end
 
 final_result
