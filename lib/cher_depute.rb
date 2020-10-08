@@ -23,18 +23,18 @@ def get_deputy_name(deputy_url)
   return get_deputy_url(deputy_url).xpath('//*[@id="haut-contenu-page"]/article/div[2]/h1').text.split(' ').delete_at(2)
 end
 
-
 def all_deputy_infos
   deputies = Array.new
-  deputy = Hash.new
 
   get_deputy_list_url.first(10).each do |deputy_url|
-    deputy['first_name'] = get_deputy_first_name(deputy_url)
-    deputy['last_name'] = get_deputy_name(deputy_url)
-    deputy['email'] = get_deputy_email(deputy_url)
-    deputies.push(deputy)
+    deputy = Hash.new
+    deputy["first_name"] = get_deputy_first_name(deputy_url)
+    deputy["last_name"] = get_deputy_name(deputy_url)
+    deputy["email"] = get_deputy_email(deputy_url)
+    deputies << deputy
+    puts deputy
   end
-  puts deputy
+  # puts deputies
 end
 
 all_deputy_infos

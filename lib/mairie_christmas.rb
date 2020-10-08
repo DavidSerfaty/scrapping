@@ -2,28 +2,33 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
+def get_townhall_urls
+  townhall_urls = Nokogiri::HTML(URI.open("http://annuaire-des-mairies.com/val-d-oise.html"))
+  return townhall_urls.xpath('//a[@class="lientxt"]/@href')
+end
+
+def get_townhall_info_url(townhall_url)
+  return Nokogiri::HTML(URI.open("http://annuaire-des-mairies.com/"+townhall_url))
+end
 
 def get_townhall_email(townhall_url)
-  town_url = Nokogiri::HTML(URI.open("http://annuaire-des-mairies.com/"+townhall_url))
-  return town_url.xpath("/html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]").text
+  return get_townhall_info_url(townhall_url).xpath("/html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]").text
 end
 
 def get_townhall_name(townhall_url)
-  town_url = Nokogiri::HTML(URI.open("http://annuaire-des-mairies.com/"+townhall_url))
-  return town_url.xpath("/html/body/div/main/section[1]/div/div/div/h1").text
+  return get_townhall_info_url(townhall_url).xpath("/html/body/div/main/section[1]/div/div/div/h1").text.split(' ').delete_at(0).downcase
 end
 
-def get_townhall_urls
-  townhall_urls = Nokogiri::HTML(URI.open("http://annuaire-des-mairies.com/val-d-oise.html"))
-  xpath_mairies_ville = townhall_urls.xpath('//a[@class="lientxt"]/@href')
+def get_townhall_info
+  townhall_array = Array.new
 
-  mairies_villes_array = Hash.new
-
-  xpath_mairies_ville.each do |ville|
-    mairies_villes_array[get_townhall_name(ville.text)] = get_townhall_email(ville.value)
+  get_townhall_urls.each do |town|
+    townhall_hash = Hash.new
+    townhall_hash[get_townhall_name(town)] = get_townhall_email(town)
+    townhall_array << townhall_hash
+    puts townhall_hash
   end
-
-   puts mairies_villes_array.each_slice(1).map(&:to_h)
+   return townhall_array
 end
 
-get_townhall_urls
+get_townhall_info

@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 
 def coinmarketcap_data
-  return coinmarketcap = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))
+  return coinmarketcap = Nokogiri::HTML(URI.open("https://coinmarketcap.com/all/views/all/"))
 end
 
 def crypto_name
@@ -31,9 +31,9 @@ end
 def final_result
   crypto_name_array = crypto_name
   crypto_price_array = crypto_price
-
   result = Hash[crypto_name_array.zip(crypto_price_array)].each_slice(1).map(&:to_h)
-  print result
+  puts result
+  return result
 end
 
 final_result
