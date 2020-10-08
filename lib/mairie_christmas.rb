@@ -12,7 +12,7 @@ def get_townhall_info_url(townhall_url)
 end
 
 def get_townhall_email(townhall_url)
-  return get_townhall_info_url(townhall_url).xpath("/html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]").text
+  return get_townhall_info_url(townhall_url).xpath('//td[contains(text(),"@")]').text
 end
 
 def get_townhall_name(townhall_url)

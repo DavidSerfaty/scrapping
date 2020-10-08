@@ -7,10 +7,8 @@ def coinmarketcap_data
 end
 
 def crypto_name
-  coinmarketcap = coinmarketcap_data
-  xpath_crypto_name = coinmarketcap.xpath('//td[@class="cmc-table__cell cmc-table__cell--sortable cmc-table__cell--left cmc-table__cell--sort-by__symbol"]')
+  xpath_crypto_name = coinmarketcap_data.xpath('//td[contains(@class,"symbol")]')
   crypto_name_array = Array.new
-
   xpath_crypto_name.each do |name|
     crypto_name_array << name.text
   end
@@ -18,10 +16,8 @@ def crypto_name
 end
 
 def crypto_price
-  coinmarketcap = coinmarketcap_data
-  xpath_crypto_price = coinmarketcap.xpath('//td[@class="cmc-table__cell cmc-table__cell--sortable cmc-table__cell--right cmc-table__cell--sort-by__price"]')
+  xpath_crypto_price = coinmarketcap_data.xpath('//td[contains(@class,"price")]')
   crypto_price_array = Array.new
-
   xpath_crypto_price.each do |price|
     crypto_price_array << price.text.delete('$,').to_f
   end
@@ -29,10 +25,13 @@ def crypto_price
 end
 
 def final_result
-  crypto_name_array = crypto_name
-  crypto_price_array = crypto_price
-  result = Hash[crypto_name_array.zip(crypto_price_array)].each_slice(1).map(&:to_h)
-  puts result
+  result = Array.new
+  crypto_name.zip(crypto_price).each do |crypto_name, crypto_price|
+    crypto_hash = Hash.new
+    crypto_hash[crypto_name] = crypto_price
+    puts crypto_hash
+    result << crypto_hash
+  end
   return result
 end
 
