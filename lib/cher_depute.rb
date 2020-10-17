@@ -26,7 +26,7 @@ end
 def all_deputy_infos
   deputies = []
 
-  get_deputy_list_url.first(10).each do |deputy_url|
+  get_deputy_list_url.first(50).each do |deputy_url|
     deputy = {}
     deputy['first_name'] = get_deputy_first_name(deputy_url)
     deputy['last_name'] = get_deputy_name(deputy_url)
@@ -34,7 +34,7 @@ def all_deputy_infos
     deputies << deputy
     puts deputy
   end
-  # puts deputies
+  return deputies
 end
 
 all_deputy_infos

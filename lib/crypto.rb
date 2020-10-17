@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 
 def coinmarketcap_data
-  coinmarketcap = Nokogiri::HTML(URI.open('https://coinmarketcap.com/all/views/all/'))
+  return Nokogiri::HTML(URI.open('https://coinmarketcap.com/all/views/all/'))
 end
 
 def crypto_name
@@ -22,7 +22,7 @@ def final_result
     puts crypto_hash
     result << crypto_hash
   end
-  result
+  return result
 end
 
 final_result

@@ -30,7 +30,7 @@ def get_townhall_info
     townhall_array << townhall_hash
     puts townhall_hash
   end
-  townhall_array
+  return townhall_array
 end
 
 get_townhall_info
